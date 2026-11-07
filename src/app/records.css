@@ -337,3 +337,130 @@
   border-radius: 10px;
   background: var(--gui-canvas);
 }
+
+/* Project questions (P2): reading recipe inside the record sheet tab. */
+.project-panel > p {
+  font-size: 16px;
+  line-height: 1.75;
+}
+.project-status {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--gui-color-1-transparent);
+}
+.project-questions {
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.project-question {
+  min-width: 0;
+  padding: 22px 0;
+  border-top: 1px solid #d8d5d1;
+}
+.project-question:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.project-question-label {
+  margin-bottom: 6px;
+  color: var(--gui-text-muted);
+  font-size: 13px;
+}
+.project-question h4 {
+  font-family: var(--gui-font-brand);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.project-question textarea {
+  margin-top: 14px;
+  min-height: 132px;
+}
+.project-count {
+  margin-top: 6px;
+  color: var(--gui-text-muted);
+  font-size: 13px;
+}
+.project-count-error {
+  color: var(--destructive);
+  font-size: 13px;
+}
+.project-answer {
+  margin-top: 12px;
+}
+.project-answer summary {
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.project-answer summary:hover {
+  background: var(--gui-color-1-transparent);
+}
+.project-answer summary:focus-visible {
+  outline: 2px solid var(--gui-focus);
+  outline-offset: 4px;
+}
+.project-answer p {
+  padding: 4px 0 8px;
+}
+.project-explanation {
+  display: grid;
+  grid-template-columns: minmax(0, 190px) minmax(0, 1fr);
+  gap: 12px 20px;
+  margin-top: 14px;
+}
+.project-explanation > div {
+  display: contents;
+}
+.project-explanation dt {
+  color: var(--gui-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.project-explanation dd {
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.project-explanation blockquote {
+  padding-left: 14px;
+  border-left: 3px solid var(--gui-color-1);
+  font-style: italic;
+}
+.project-signal {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid var(--gui-text);
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.project-signal[data-level="concrete"] {
+  background: var(--gui-color-1-transparent);
+}
+.project-simulation {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #d8d5d1;
+}
+.project-list-status {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--gui-text-muted);
+}
+@media (max-width: 700px) {
+  .project-explanation {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .project-explanation dd {
+    margin-bottom: 10px;
+  }
+  .project-question h4 {
+    font-size: 19px;
+  }
+}

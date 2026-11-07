@@ -1,7 +1,7 @@
 import type { ReactNode, Ref } from "react";
 import { BackLink } from "@/components/back-link";
 import { ProcessTimeline } from "@/components/process-timeline";
-import { RecordSheet } from "@/components/record-sheet";
+import { RecordSheet, type RecordSection } from "@/components/record-sheet";
 import { CvAttachment } from "./cv-attachment";
 import { MatchScore } from "./match-score";
 import { stageLabels, type Application, type Stage } from "./model";
@@ -21,6 +21,8 @@ export function ApplicationRecord({
   statusRef,
   children,
   footer,
+  extraSections = [],
+  defaultSection,
 }: {
   application: Pick<
     Application,
@@ -32,6 +34,8 @@ export function ApplicationRecord({
   statusRef?: Ref<HTMLSpanElement>;
   children?: ReactNode;
   footer?: ReactNode;
+  extraSections?: RecordSection[];
+  defaultSection?: string;
 }) {
   const candidate = audience === "candidate";
   const title = candidate ? application.jobTitle : application.candidateName;
@@ -93,7 +97,9 @@ export function ApplicationRecord({
                 </>
               ),
             },
+            ...extraSections,
           ]}
+          defaultValue={defaultSection}
           footer={footer}
         >
           {children}

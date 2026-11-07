@@ -14,6 +14,7 @@ import { currentPerson, publishedJobs, stageLabels, MIN_APPLICATION_ANSWER_LENGT
 import { PageTitle, Empty, NotFound, Notice } from "./shell";
 import { CvAttachment } from "./cv-attachment";
 import { MatchScore } from "./match-score";
+import { projectQuestionsStatus } from "./project-questions-panel";
 import { RecruitingApplication } from "./recruiting-application";
 import { CandidateApplication } from "./candidate-application";
 
@@ -451,6 +452,13 @@ export function ApplicationsPage({ employer = false }: { employer?: boolean }) {
                       : state.companies.find((x) => x.id === a.companyId)?.name}
                   </p>
                   <p>{stageLabels[a.stage]}</p>
+                  {projectQuestionsStatus(a) && (
+                    <p className="project-list-status">
+                      {!employer && a.projectQuestions && !a.projectQuestions.answeredAt
+                        ? "Pracodawca prosi o odpowiedź na pytania o projekt"
+                        : projectQuestionsStatus(a)}
+                    </p>
+                  )}
                 </div>
                 <MatchScore score={a.score} />
               </div>

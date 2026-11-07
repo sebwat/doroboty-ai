@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ApplicationRecord } from "./application-record";
+import { EmployerProjectQuestions } from "./project-questions-panel";
 import { nextStages, stageLabels, type Application } from "./model";
 import { usePrototype } from "./store";
 
@@ -29,6 +30,14 @@ export function RecruitingApplication({ application }: { application: Applicatio
         audience="employer"
         history={application.events}
         statusRef={statusRef}
+        extraSections={[
+          {
+            value: "project",
+            label: "Pytania o projekt",
+            content: <EmployerProjectQuestions application={application} />,
+          },
+        ]}
+        defaultSection={application.projectQuestions?.answeredAt ? "project" : undefined}
         footer={
           availableStages.length > 0 ? (
             <>
