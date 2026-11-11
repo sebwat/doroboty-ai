@@ -25,6 +25,18 @@
 .record-tab[data-active] {
   color: var(--gui-text);
 }
+/* Three tabs (with "Pytania o projekt") must fit 320px: tighten spacing and let labels wrap. */
+@media (max-width: 480px) {
+  .record-tabs {
+    gap: 4px;
+  }
+  .record-tabs .record-tab {
+    flex-shrink: 1;
+    min-width: 0;
+    padding-inline: 10px;
+    white-space: normal;
+  }
+}
 .record-tab[data-active]::after {
   position: absolute;
   right: 0;

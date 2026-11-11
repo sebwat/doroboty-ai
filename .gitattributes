@@ -1,0 +1,2 @@
+# Keep LF on every platform: formatting and pristine-hash checks compare exact bytes.
+* text=auto eol=lf
