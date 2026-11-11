@@ -7,3 +7,5 @@ artifacts
 
 # Preserve the versioned reference byte-for-byte; checked by its own scripts.
 docs/design-system/agent-kit/
+# Generated production-readiness report; rendered by its own tool.
+docs/production-readiness.html

@@ -2,6 +2,7 @@ import { z } from "zod";
 import marketplace from "./data/marketplace.json" with { type: "json" };
 import people from "./data/people.json" with { type: "json" };
 import type { JobWithCompany } from "@/features/jobs/types";
+import { PROJECT_ANSWER_MAX, PROJECT_ANSWER_MIN, preparedQuestions } from "./project-questions";
 
 const id = z
   .string()
@@ -104,6 +105,20 @@ export const nextStages: Record<Stage, Stage[]> = {
   withdrawn: [],
   hired: [],
 };
+const projectQuestionsSchema = z.object({
+  sentAt: z.iso.datetime(),
+  answeredAt: z.iso.datetime().optional(),
+  items: z
+    .array(
+      z.object({
+        question: text.min(1),
+        checks: text,
+        followUp: text,
+        answer: z.string().trim().max(PROJECT_ANSWER_MAX),
+      }),
+    )
+    .length(3),
+});
 const applicationSchema = z.object({
   id,
   candidateId: id,
@@ -122,6 +137,7 @@ const applicationSchema = z.object({
     .array(z.object({ stage: z.enum(stages), at: z.iso.datetime(), note: text }))
     .min(1)
     .max(30),
+  projectQuestions: projectQuestionsSchema.optional(),
 });
 const draftSchema = z.object({
   candidateId: id,
@@ -195,6 +211,7 @@ export const stateSchema = z
     }
   });
 export type State = z.infer<typeof stateSchema>;
+const terminalStages: Stage[] = ["hired", "rejected", "withdrawn"];
 export type Person = State["people"][number];
 export type Application = State["applications"][number];
 export type Action =
@@ -212,6 +229,8 @@ export type Action =
     }
   | { type: "stage"; applicationId: string; stage: Stage; note: string }
   | { type: "withdraw"; applicationId: string }
+  | { type: "send_project_questions"; applicationId: string }
+  | { type: "answer_project_questions"; applicationId: string; answers: string[] }
   | { type: "publish"; job: z.infer<typeof jobSchema> }
   | { type: "company"; name: string; description: string };
 
@@ -335,6 +354,33 @@ export function transition(
     }
     application.stage = stage;
     application.events.push({ stage, at: now, note: action.type === "stage" ? action.note : "" });
+  } else if (action.type === "send_project_questions") {
+    const p = employer();
+    const application = s.applications.find((x) => x.id === action.applicationId);
+    if (!application || application.companyId !== p.companyId)
+      return fail("Nie znaleziono aplikacji.");
+    if (terminalStages.includes(application.stage) || application.projectQuestions)
+      fail("Pytań o projekt nie można już wysłać.");
+    application.projectQuestions = {
+      sentAt: now,
+      items: preparedQuestions(application.candidateId).map((q) => ({ ...q, answer: "" })),
+    };
+  } else if (action.type === "answer_project_questions") {
+    const p = candidate();
+    const application = s.applications.find((x) => x.id === action.applicationId);
+    const questions = application?.projectQuestions;
+    if (!application || application.candidateId !== p.id || !questions)
+      return fail("Nie znaleziono pytań o projekt.");
+    if (terminalStages.includes(application.stage) || questions.answeredAt)
+      fail("Odpowiedzi nie można już wysłać.");
+    const answers = action.answers.map((x) => x.trim());
+    if (
+      answers.length !== questions.items.length ||
+      answers.some((x) => x.length < PROJECT_ANSWER_MIN || x.length > PROJECT_ANSWER_MAX)
+    )
+      fail(`Każda odpowiedź musi mieć od ${PROJECT_ANSWER_MIN} do ${PROJECT_ANSWER_MAX} znaków.`);
+    questions.items.forEach((item, index) => (item.answer = answers[index]));
+    questions.answeredAt = now;
   } else if (action.type === "publish") {
     const p = employer();
     const job = jobSchema.parse(action.job);

@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ApplicationRecord } from "./application-record";
+import { CandidateProjectQuestions } from "./project-questions-panel";
 import type { Application } from "./model";
 import { usePrototype } from "./store";
 
@@ -29,6 +30,18 @@ export function CandidateApplication({ application }: { application: Application
         audience="candidate"
         history={application.events.map(({ stage, at }) => ({ stage, at }))}
         statusRef={statusRef}
+        extraSections={
+          application.projectQuestions
+            ? [
+                {
+                  value: "project",
+                  label: "Pytania o projekt",
+                  content: <CandidateProjectQuestions application={application} />,
+                },
+              ]
+            : []
+        }
+        defaultSection={application.projectQuestions ? "project" : undefined}
         footer={
           terminal ? (
             <p className="record-caption">

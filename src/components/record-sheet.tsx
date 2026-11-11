@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Tabs } from "@base-ui/react/tabs";
 import { Button } from "@/components/ui/button";
 
-type RecordSection = { value: string; label: string; content: ReactNode };
+export type RecordSection = { value: string; label: string; content: ReactNode };
 
 export function RecordSheet({
   label,
@@ -10,17 +10,19 @@ export function RecordSheet({
   attachment,
   children,
   footer,
+  defaultValue,
 }: {
   label: string;
   sections: RecordSection[];
   attachment?: ReactNode;
   children?: ReactNode;
   footer?: ReactNode;
+  defaultValue?: string;
 }) {
   return (
     <section className="record-sheet" aria-label={label}>
       <h2 className="sr-only">{label}</h2>
-      <Tabs.Root defaultValue={sections[0]?.value}>
+      <Tabs.Root defaultValue={defaultValue ?? sections[0]?.value}>
         <Tabs.List className="record-tabs" aria-label={label} activateOnFocus>
           {sections.map((section) => (
             <Tabs.Tab

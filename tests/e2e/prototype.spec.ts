@@ -251,6 +251,34 @@ test("storage denial keeps the app usable and offers export", async ({ page }) =
   await page.goto("/#/app/profil");
   await expect(page.getByLabel("Imię i nazwisko")).toHaveValue("Anna Kowalska");
 });
+test("unexpected render error shows recovery actions and leaves the save untouched", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const original = Object.getOwnPropertyDescriptor(Intl.DateTimeFormat.prototype, "format")!;
+    Object.defineProperty(Intl.DateTimeFormat.prototype, "format", {
+      get() {
+        if (sessionStorage.getItem("force-render-error")) throw new Error("Forced render error");
+        return original.get!.call(this);
+      },
+    });
+  });
+  await choose(page, "Karolina Wiśniewska");
+  await page.goto("/#/app/kandydaci/application-example");
+  await page.getByRole("tab", { name: "Pytania o projekt" }).click();
+  await page.getByRole("button", { name: "Wyślij pytania kandydatowi" }).click();
+  const saved = await page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY);
+  await page.evaluate(() => sessionStorage.setItem("force-render-error", "1"));
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Coś poszło nie tak" })).toBeVisible();
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Pobierz zapis scenariusza" }).click();
+  expect((await download).suggestedFilename()).toBe("doroboty-zapis-do-odzyskania.json");
+  expect(await page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY)).toBe(saved);
+  await page.evaluate(() => sessionStorage.removeItem("force-render-error"));
+  await page.getByRole("link", { name: "Wróć na stronę główną" }).click();
+  await expect(page.getByRole("heading", { name: "Coś poszło nie tak" })).toHaveCount(0);
+});
 test("map, hash deep links and unknown records work without external requests", async ({
   page,
 }) => {
