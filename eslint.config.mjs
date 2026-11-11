@@ -10,6 +10,7 @@ export default tseslint.config(
       "playwright-report*/**",
       "test-results/**",
       "artifacts/**",
+      ".wrangler/**",
       "docs/design-system/agent-kit/**",
     ],
   },
