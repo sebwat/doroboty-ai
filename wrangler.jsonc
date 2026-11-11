@@ -1,0 +1,9 @@
+// Cloudflare Workers static hosting: serves the Vite build from dist/. No Worker script runs.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "doroboty-ai",
+  "compatibility_date": "2026-11-11",
+  "assets": {
+    "directory": "./dist",
+  },
+}

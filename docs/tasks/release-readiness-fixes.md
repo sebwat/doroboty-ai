@@ -22,4 +22,4 @@ A local production-readiness audit (`docs/production-readiness.html`) of commit 
 - [x] No element of the employer record extends past the viewport from 1280px down to 320px (existing e2e).
 - [x] `format:check`, `design-system:check`, `verify:packet` pass on a Windows clone.
 - [x] FEATURES.md updated (SYS-12).
-- [ ] `./scripts/verify` passes: browser tests need a provisioned Playwright Chromium; locally the suite ran on installed Microsoft Edge instead.
+- [x] `./scripts/verify` passes: first run on installed Microsoft Edge; after Playwright Chromium was provisioned the full gate passed on Chromium (commit `4751b03`).

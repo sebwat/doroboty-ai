@@ -4,7 +4,7 @@ Run right after publishing a version, on the published address, in a private bro
 
 ## Before publishing
 
-- Note the commit being published and the previous published commit (the rollback target).
+- Note the commit being published and the previous published commit (the rollback target). How publishing and rollback work: [release.md](release.md).
 - `npm ci` and `./scripts/verify` pass for that commit (locally or in CI).
 
 ## Check
@@ -19,4 +19,4 @@ Run right after publishing a version, on the published address, in a private bro
 
 ## Rollback condition
 
-Any failed step above, a blank page or the “Coś poszło nie tak” screen on a normal path: republish the previous commit, repeat this check on it and record what failed. The app keeps data only in each visitor's browser, so a rollback changes no stored data; saves stay compatible because new fields are optional.
+Any failed step above, a blank page or the “Coś poszło nie tak” screen on a normal path: roll back to the previous version ([release.md](release.md#rollback)), repeat this check on it and record what failed. The app keeps data only in each visitor's browser, so a rollback changes no stored data; saves stay compatible because new fields are optional.
