@@ -2,9 +2,10 @@ import { Component, type ReactNode } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { STORAGE_KEY } from "./storage";
 import { downloadText } from "./settings";
+import { reportError } from "@/lib/analytics";
 
-// Last-resort fallback for unexpected render errors. Nothing is logged: the save can
-// contain private free text, so the person decides whether to download it.
+// Last-resort fallback for unexpected render errors. Only the error goes to analytics (when
+// enabled): the save can contain private free text, so the person decides whether to download it.
 function savedScenario() {
   try {
     return window.localStorage.getItem(STORAGE_KEY);
@@ -18,6 +19,10 @@ export class AppErrorBoundary extends Component<{ children: ReactNode }, { faile
 
   static getDerivedStateFromError() {
     return { failed: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    reportError(error);
   }
 
   render() {
