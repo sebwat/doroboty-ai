@@ -17,6 +17,7 @@ The app is published as static files on Cloudflare Workers. [wrangler.jsonc](../
 2. Install the “Cloudflare Workers & Pages” GitHub app for `sebwat/doroboty-ai` only, then pick the repository.
 3. Project name `doroboty-ai` (must equal `name` in `wrangler.jsonc`), branch `main`, build command `npm run build`, deploy command `npx wrangler deploy`.
 4. Add build variable `NODE_VERSION` = `24`, then save and deploy.
+5. For analytics add build variable `VITE_POSTHOG_KEY` = the project API key (`phc_…`) of the PostHog EU project. It is a public client key; without it the build sends no analytics.
 
 ## After each release
 
@@ -26,7 +27,7 @@ Run the [release smoke check](release-smoke-check.md) on the published `workers.
 
 Signals: the smoke check fails, the address shows a blank page or the “Coś poszło nie tak” screen, a visitor reports a problem, or a Cloudflare build fails.
 
-1. Diagnose (10 minutes at most): open the address in a private window and read the browser console; in Cloudflare open `doroboty-ai` → Deployments and the latest build log; on GitHub check the CI run of the last merged pull request. Note what failed and since which version.
+1. Diagnose (10 minutes at most): open the address in a private window and read the browser console; in PostHog check Error tracking and Activity for recent errors; in Cloudflare open `doroboty-ai` → Deployments and the latest build log; on GitHub check the CI run of the last merged pull request. Note what failed and since which version.
 2. If the newest version is the cause, or the cause is unclear, roll back (below). A failed build needs no rollback: the previous version stays published.
 3. Fix the cause on a branch, pass CI, merge to `main` and repeat the smoke check.
 4. Tell visitors when the address was shared and the outage lasts more than an hour: post a short note where the link was shared (course channel, message to test participants) saying what does not work and when it is expected back; post again when it works. There are no accounts or e-mail lists; visitors' saved scenarios stay in their browsers and are not affected.

@@ -1,6 +1,6 @@
 # Architecture
 
-One React/TypeScript application is built by Vite into static files. HashRouter renders routes under /#/; route parameters created in the browser require no hosting rewrites. The running app currently uses local CSS tokens, Timeless font and Base UI primitives. New and changed UI must follow the accepted Poster People [design system](design-system/README.md), adapted into the existing stack; installing its reference did not convert runtime styles. There is no server data/API layer. The build is published as static assets on Cloudflare Workers; a small Worker only redirects plain HTTP page requests to HTTPS ([release](release.md)).
+One React/TypeScript application is built by Vite into static files. HashRouter renders routes under /#/; route parameters created in the browser require no hosting rewrites. The running app currently uses local CSS tokens, Timeless font and Base UI primitives. New and changed UI must follow the accepted Poster People [design system](design-system/README.md), adapted into the existing stack; installing its reference did not convert runtime styles. There is no server data/API layer. The build is published as static assets on Cloudflare Workers; a small Worker only redirects plain HTTP page requests to HTTPS ([release](release.md)). Production builds send anonymous pageviews, link/button clicks and render errors to PostHog Cloud EU ([analytics](../src/lib/analytics.ts)); nothing else leaves the browser.
 
 ## Data flow
 
