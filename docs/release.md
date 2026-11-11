@@ -7,6 +7,7 @@ The app is published as static files on Cloudflare Workers. [wrangler.jsonc](../
 - The Cloudflare project `doroboty-ai` is connected to the GitHub repository `sebwat/doroboty-ai` through the “Cloudflare Workers & Pages” GitHub app.
 - Every push to `main` starts a build on Cloudflare: install from `package-lock.json`, `npm run build`, `npx wrangler deploy` (the `wrangler` version comes from `package.json`).
 - Build variable `NODE_VERSION=24` matches `.nvmrc`; check the Node version in the first build log.
+- Each pull request branch also gets a Cloudflare Preview build (`npx wrangler preview`, needs the `previews` block in `wrangler.jsonc`); its check and preview address appear on the pull request.
 - Merge to `main` only after CI (`./scripts/verify`) passes on the pull request.
 - Owner of releases and incidents: Sebastian Watras.
 

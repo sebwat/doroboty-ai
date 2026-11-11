@@ -10,4 +10,6 @@
     "binding": "ASSETS",
     "run_worker_first": ["/*", "!/assets/*", "!/case/*", "!/company-logos/*", "!/cv/*"],
   },
+  // Pull request branches get a Preview build on Cloudflare; `wrangler preview` requires this block.
+  "previews": {},
 }
