@@ -88,6 +88,38 @@
   --radius-2xl: var(--gui-radius-xl);
   --radius-3xl: var(--gui-radius-xl);
   --radius-4xl: var(--gui-radius-xl);
+  --animate-marquee: marquee var(--duration) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+}
+
+/* Reduced motion: stop the marquee, keep one copy and let people scroll it by hand. */
+@media (prefers-reduced-motion: reduce) {
+  [data-marquee] {
+    overflow-x: auto;
+  }
+  [data-marquee] > [data-marquee-copy] {
+    animation: none;
+  }
+  [data-marquee] > [data-marquee-copy="repeat"] {
+    display: none;
+  }
 }
 
 @layer base {

@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { Marquee } from "@/components/ui/marquee";
 import { JobCard } from "@/features/jobs/job-card";
 import { usePrototype } from "./store";
 import { publishedJobs } from "./model";
@@ -29,7 +30,8 @@ const categories = [
 
 export default function HomePage() {
   const { state } = usePrototype();
-  const latestJobs = publishedJobs(state).slice(0, 4);
+  const hiringJobs = publishedJobs(state);
+  const latestJobs = hiringJobs.slice(0, 4);
 
   return (
     <>
@@ -61,6 +63,38 @@ export default function HomePage() {
           <img className="people-art" src={peopleArt} alt="Dwie osoby pracujące razem z laptopem" />
         </div>
       </section>
+
+      {hiringJobs.length > 0 && (
+        <section aria-labelledby="hiring-now" className="shadow-[var(--gui-divider-bottom-shadow)]">
+          <div className="mx-auto flex max-w-[1360px] flex-col gap-3 px-5 py-6 lg:flex-row lg:items-center lg:gap-6 lg:px-8">
+            <p
+              id="hiring-now"
+              className="shrink-0 text-xs font-medium tracking-[var(--gui-tracking-xl)] text-muted-foreground"
+            >
+              Teraz rekrutują
+            </p>
+            <div className="relative min-w-0 flex-1">
+              <Marquee pauseOnHover className="p-0 py-1 [--duration:45s] [--gap:0.75rem]">
+                {(isCopy) =>
+                  hiringJobs.map((job) => (
+                    <Link
+                      key={job.id}
+                      to={`/oferty/${job.slug}`}
+                      tabIndex={isCopy ? -1 : undefined}
+                      className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm whitespace-nowrap transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                    >
+                      <span className="font-medium">{job.title}</span>
+                      <span className="text-muted-foreground">· {job.company.name}</span>
+                    </Link>
+                  ))
+                }
+              </Marquee>
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-background" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-background" />
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-[1360px] px-5 py-16 lg:px-8 lg:py-20">
         <p className="text-xs font-medium tracking-[var(--gui-tracking-xl)] text-muted-foreground">
